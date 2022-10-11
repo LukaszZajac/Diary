@@ -27,11 +27,13 @@ namespace Diary.ViewModels
             EditStudentCommand = new RelayCommand(AddEditStudent, CanEditDeleteStudent);
             DeleteStudentCommand = new AsyncRelayCommand(DeleteStudent, CanEditDeleteStudent);
             RefreshStudentsCommand = new RelayCommand(RefreshStudents);
+            ChangeSettingsDbCommand = new RelayCommand(ChangeSettingsDb);
+            LoadApplicationCommand = new AsyncRelayCommand(LoadApplication);
 
-            RefreshDiary();
-            InitGroups();
         }
+
         
+
 
 
         //właściwość ICommand dlatego że RelayCommand implementuje interfejs
@@ -39,6 +41,10 @@ namespace Diary.ViewModels
         public ICommand EditStudentCommand { get; set; }
         public ICommand DeleteStudentCommand { get; set; }
         public ICommand RefreshStudentsCommand { get; set; }
+
+        public ICommand ChangeSettingsDbCommand { get; set; }
+        public ICommand LoadApplicationCommand { get; set; }
+
 
         private StudentWrapper _selectedStudent;
         public StudentWrapper SelectedStudent
@@ -138,11 +144,18 @@ namespace Diary.ViewModels
             
         //}
 
+        //metoda otwierająca nowe okno
         private void AddEditStudent(object obj)
         {
             var addEditStudentWindow = new AddEditStudentView(obj as StudentWrapper);
             addEditStudentWindow.Closed += AddEditStudentWindow_Closed;
             addEditStudentWindow.ShowDialog();
+        }
+
+        private void ChangeSettingsDb(object obj)
+        {
+            var changeSettingsDbWindow = new ChangeSettingsDbView();
+            changeSettingsDbWindow.ShowDialog();
         }
 
         private void AddEditStudentWindow_Closed(object sender, EventArgs e)
@@ -154,5 +167,50 @@ namespace Diary.ViewModels
         {
             Students = new ObservableCollection<StudentWrapper>(_repository.GetStudents(SelectedGroupId));         
         }
+
+        private bool ConnectToDatabase()
+        {
+            try
+            {
+                using(var contextDb = new ApplicationDbContext())
+                {
+                    contextDb.Database.Connection.Open();
+                    contextDb.Database.Connection.Close();
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private async Task LoadApplication(object obj)
+        {
+            if (ConnectToDatabase())
+            {
+                RefreshDiary();
+                InitGroups();
+            }
+            else
+            {
+                var metroWindow = Application.Current.MainWindow as MetroWindow;
+                var dialog = await metroWindow.ShowMessageAsync(
+                    "Błędne dane do połączenia z bazą danych",
+                    $"Czy chcesz podać prawidłowe dane dostępowe do bazy danych?",
+                    MessageDialogStyle.AffirmativeAndNegative);
+
+                if (dialog != MessageDialogResult.Affirmative)
+                {
+                    Application.Current.Shutdown();
+                }
+                else
+                {
+                    var changeSettingsDbView = new ChangeSettingsDbView();
+                    changeSettingsDbView.ShowDialog();
+                }
+            }
+        }
+
     }
 }

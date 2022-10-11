@@ -89,6 +89,10 @@ namespace Diary.ViewModels
 
         private void Confirm(object obj)
         {
+            //jeżeli nie ma prawidłowych danych to wyjdź z tej metody
+            if (!Student.IsValid)
+                return;
+
             if (!IsUpdate)//jeśli dodanie nowego ucznia
                 AddStudent();
             else //aktualizacja

@@ -24,12 +24,14 @@ namespace Diary.Views
     {
         public MainWindow()
         {
+            //var trig = new Microsoft.Xaml.Behaviors.EventTrigger(); trig.SourceName = "foo";
             InitializeComponent();
-
+            
             //wskazanie na to z czym będziemy bindować
             //widok wie gdzie ma szukać powiązanych danych
             //Takim zapisem wskazujemy, że dla tego okna MainWindow – ViewModelem jest klasa MainViewModel.
             DataContext = new MainViewModel();
+            //var _ = new Microsoft.Xaml.Behaviors.DefaultTriggerAttribute(typeof(Trigger), typeof(Microsoft.Xaml.Behaviors.TriggerBase), null);
         }
     }
 }

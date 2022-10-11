@@ -1,0 +1,48 @@
+﻿<mah:MetroWindow x:Class="Diary.Views.ChangeSettingsDbView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:local="clr-namespace:Diary.Views"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Name ="ChangeSettingsDbWindow"
+        Title="Ustawienia dostępu do bazy danych" Height="300" Width="400">
+    <Grid Margin="0,0,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="1" Content="Adres serwera:" Margin="5"/>
+        <TextBox Text="{Binding SettingsDb.ServerAddress, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+
+        <Label Grid.Row="2" Content="Nazwa serwera:" Margin="5"/>
+        <TextBox Text="{Binding SettingsDb.ServerName, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Grid.Row="2" Grid.Column="1" Margin="5"/>
+
+        <Label Grid.Row="3" Content="Baza danych:" Margin="5"/>
+        <TextBox Text="{Binding SettingsDb.Database, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Grid.Row="3" Grid.Column="1" Margin="5"/>
+
+        <Label Grid.Row="4" Content="Użytkownik:" Margin="5"/>
+        <TextBox Text="{Binding SettingsDb.User, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Grid.Row="4" Grid.Column="1" Margin="5"/>
+
+        <Label Grid.Row="5" Content="Hasło:" Margin="5"/>
+        <TextBox Text="{Binding SettingsDb.Password, UpdateSourceTrigger=PropertyChanged,ValidatesOnDataErrors=True}" Grid.Row="5" Grid.Column="1" Margin="5"/>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right">
+            <Button Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=ChangeSettingsDbWindow}" Content="Anuluj" Height="25" Width="100" Margin="5"/>
+            <Button Command="{Binding ConfirmCommand}" Content="Zatwierdź" Height="25" Width="100" Margin="5"/>
+        </StackPanel>
+
+    </Grid>
+</mah:MetroWindow>
